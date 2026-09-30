@@ -1,0 +1,11 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: citedocs
+      POSTGRES_PASSWORD: citedocs
+      POSTGRES_DB: citedocs
+    ports: ["5432:5432"]
+    volumes: [pgdata:/var/lib/postgresql/data]
+volumes:
+  pgdata:

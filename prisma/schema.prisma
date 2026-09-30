@@ -1,0 +1,90 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+enum Role {
+  admin
+  member
+}
+
+enum Visibility {
+  team
+  admins
+}
+
+model User {
+  id           String       @id @default(cuid())
+  email        String       @unique
+  passwordHash String
+  sessions     Session[]
+  memberships  Membership[]
+  questions    Question[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Team {
+  id          String       @id @default(cuid())
+  name        String
+  memberships Membership[]
+  documents   Document[]
+  chunks      Chunk[]
+}
+
+model Membership {
+  id     String @id @default(cuid())
+  userId String
+  teamId String
+  role   Role
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  team   Team   @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, teamId])
+}
+
+model Document {
+  id         String     @id @default(cuid())
+  teamId     String
+  title      String
+  visibility Visibility
+  text       String
+  createdAt  DateTime   @default(now())
+  team       Team       @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  chunks     Chunk[]
+}
+
+model Chunk {
+  id         String                      @id @default(cuid())
+  documentId String
+  teamId     String
+  visibility Visibility
+  position   Int
+  text       String
+  embedding  Unsupported("vector(768)")?
+  document   Document                    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  team       Team                        @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@index([teamId, visibility])
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  userId    String
+  question  String
+  answer    String
+  chunkIds  String[]
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
