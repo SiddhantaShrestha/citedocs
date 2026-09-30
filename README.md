@@ -4,6 +4,26 @@ Team docs Q&A. You ask a question, the app answers from your team's documents, a
 
 Stack: Next.js, Postgres, pgvector, Prisma. Models run locally with Ollama.
 
+## Run locally
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and [Ollama](https://ollama.com).
+2. Install dependencies: `npm install`
+3. Copy `.env.example` to `.env`
+4. Start the database: `docker compose up -d`
+5. Apply the schema: `npx prisma migrate dev`
+6. Create the demo users: `npm run db:seed`
+7. Pull the models: `ollama pull nomic-embed-text` and `ollama pull llama3.2`
+8. Start the app: `npm run dev`
+
+Open http://localhost:3000
+
+Both demo accounts use the password `citedocs`.
+
+- `admin@citedocs.test` is an admin on the Demo team.
+- `member@citedocs.test` is a member on the Demo team.
+
+The init migration already runs `CREATE EXTENSION IF NOT EXISTS vector`. There is no vector index on purpose.
+
 ## Done when
 
 - Two users on one team can sign in. One is an admin, one is a member.
@@ -68,20 +88,3 @@ We are not building per-user access on single paragraphs. If a document is `admi
 - Demo data is seeded, including a couple of `admins` documents so the filter is obvious.
 
 The retrieval test only checks which chunk was found. It does not need the chat model. Answer quality will be lower than a paid model, and that is fine for this project.
-
-## Demo accounts
-
-Both use the password `citedocs`. Run `npm run db:seed` after the database is up.
-
-- `admin@citedocs.test` is an admin on the Demo team.
-- `member@citedocs.test` is a member on the Demo team.
-
-## Local setup
-
-1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and [Ollama](https://ollama.com).
-2. Start the database: `docker compose up -d`
-3. Apply the schema: `npx prisma migrate dev`
-4. Pull the models: `ollama pull nomic-embed-text` and `ollama pull llama3.2`
-5. Start the app: `npm run dev`
-
-The init migration already runs `CREATE EXTENSION IF NOT EXISTS vector`. There is no vector index on purpose.
