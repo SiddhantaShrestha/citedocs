@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { extractText } from "unpdf";
 import { splitChunks } from "../lib/chunk";
 import { listVisibleDocuments, readUpload, saveDocument } from "../lib/documents";
+import { ingestDocument } from "../lib/ingest";
 
 const prisma = new PrismaClient();
 
@@ -45,12 +46,13 @@ async function main() {
   const handbook = new File(["The office opens at 9."], "team-handbook.txt", {
     type: "text/plain",
   });
-  await saveDocument({
+  const savedHandbook = await saveDocument({
     userId: admin.id,
     title: "Team handbook",
     visibility: "team",
     text: await readUpload(handbook),
   });
+  await ingestDocument(savedHandbook.id);
 
   const pdfBytes = tinyPdf("Admin only payroll notes");
   const { text } = await extractText(new Uint8Array(pdfBytes), { mergePages: true });
@@ -61,12 +63,13 @@ async function main() {
   const payroll = new File([pdfBytes], "payroll-notes.pdf", {
     type: "application/pdf",
   });
-  await saveDocument({
+  const savedPayroll = await saveDocument({
     userId: admin.id,
     title: "Payroll notes",
     visibility: "admins",
     text: await readUpload(payroll),
   });
+  await ingestDocument(savedPayroll.id);
 
   let memberBlocked = false;
   try {

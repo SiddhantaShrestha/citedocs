@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { askQuestion } from "../lib/ask";
 import { embedTexts, toVectorLiteral } from "../lib/embed";
+import { ingestDocument } from "../lib/ingest";
 import { searchChunks } from "../lib/retrieve";
 
 const prisma = new PrismaClient();
@@ -40,9 +41,38 @@ async function main() {
   const adminHits = await searchChunks(admin.memberships, toVectorLiteral(payrollVector));
   if (!adminHits.some((hit) => hit.id === payroll.id)) {
     throw new Error(
-      `Admin missed the payroll chunk: ${adminHits.map((hit) => `${hit.title} ${hit.distance.toFixed(3)}`).join(", ")}`,
+      `Admin missed the payroll chunk: ${adminHits.map((hit) => `${hit.title} ${hit.distance.toFixed(3)}`).join(", ") || "none"}`,
     );
   }
+  console.log(
+    "Admin payroll search:",
+    adminHits.map((hit) => `${hit.title} ${hit.distance.toFixed(3)}`).join(", "),
+  );
+
+  await prisma.team.deleteMany({ where: { name: "Other studio" } });
+  const otherTeam = await prisma.team.create({ data: { name: "Other studio" } });
+  const otherDocument = await prisma.document.create({
+    data: {
+      teamId: otherTeam.id,
+      title: "Oak Street reserve",
+      visibility: "admins",
+      text: "The other studio keeps a private severance reserve of $77,000 for the Oak Street office.",
+    },
+  });
+  await ingestDocument(otherDocument.id);
+  const otherChunk = await prisma.chunk.findFirstOrThrow({
+    where: { documentId: otherDocument.id },
+  });
+  const [otherVector] = await embedTexts([otherChunk.text], "query");
+  const otherLiteral = toVectorLiteral(otherVector);
+  for (const person of [member, admin]) {
+    const hits = await searchChunks(person.memberships, otherLiteral);
+    if (hits.some((hit) => hit.id === otherChunk.id)) {
+      throw new Error("A Demo user retrieved the other team's chunk.");
+    }
+  }
+  await prisma.team.delete({ where: { id: otherTeam.id } });
+  console.log("Other team stayed hidden from Demo.");
 
   const [officeVector] = await embedTexts(["When does the office open?"], "query");
   const officeHits = await searchChunks(

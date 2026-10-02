@@ -151,7 +151,7 @@ export default async function Home() {
           )}
         </section>
 
-        <section className="flex flex-col gap-8">
+        <section className="flex flex-col gap-6 lg:sticky lg:top-6">
           <div className="flex flex-col gap-2">
             <h2 className="text-2xl font-semibold tracking-tight">Documents</h2>
             <p className="text-base text-muted-foreground">
@@ -172,26 +172,21 @@ export default async function Home() {
               </CardContent>
             </Card>
           ) : (
-            <ul className="flex flex-col gap-4">
+            <ul className="max-h-80 divide-y divide-border overflow-y-auto border border-border bg-card">
               {documents.map((document) => (
-                <li key={document.id}>
-                  <Card className="text-base/relaxed [--card-spacing:--spacing(5)]">
-                    <CardHeader>
-                      <div className="flex items-start justify-between gap-3">
-                        <CardTitle className="font-sans text-base">{document.title}</CardTitle>
-                        <VisibilityBadge visibility={document.visibility} />
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {document._count.chunks} chunk
-                        {document._count.chunks === 1 ? "" : "s"}
-                      </p>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-base leading-7 text-foreground">
-                        {preview(document.text)}
-                      </p>
-                    </CardContent>
-                  </Card>
+                <li
+                  key={document.id}
+                  className="flex items-center justify-between gap-3 px-4 py-3"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">{document.title}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {document._count.chunks === 1
+                        ? "1 chunk"
+                        : `${document._count.chunks} chunks`}
+                    </p>
+                  </div>
+                  <VisibilityBadge visibility={document.visibility} />
                 </li>
               ))}
             </ul>

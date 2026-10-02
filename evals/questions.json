@@ -1,0 +1,208 @@
+[
+  {
+    "id": "m-fridge",
+    "role": "member",
+    "question": "When is leftover food thrown out of the office fridge?",
+    "document": "Employee handbook",
+    "snippet": "emptied every Friday at"
+  },
+  {
+    "id": "m-guest",
+    "role": "member",
+    "question": "How early do you have to warn reception that a visitor is coming?",
+    "document": "Employee handbook",
+    "snippet": "email Maya before 9:00"
+  },
+  {
+    "id": "m-monday",
+    "role": "member",
+    "question": "Is there a weekday you cannot pick as your work-from-home day?",
+    "document": "Employee handbook",
+    "snippet": "Monday is an office"
+  },
+  {
+    "id": "m-probation",
+    "role": "member",
+    "question": "How long are you on probation after your start date?",
+    "document": "Employee handbook",
+    "snippet": "Probation lasts 90 days"
+  },
+  {
+    "id": "m-leave-days",
+    "role": "member",
+    "question": "How many paid vacation days does a full-time person get in a year?",
+    "document": "Leave policy",
+    "snippet": "22 days of annual"
+  },
+  {
+    "id": "m-carry",
+    "role": "member",
+    "question": "What is the last day unused vacation can still be used the next year?",
+    "document": "Leave policy",
+    "snippet": "expire on 31 March"
+  },
+  {
+    "id": "m-sick",
+    "role": "member",
+    "question": "How many illness days are in the yearly balance?",
+    "document": "Leave policy",
+    "snippet": "8 sick days each"
+  },
+  {
+    "id": "m-doctor",
+    "role": "member",
+    "question": "If you are ill for several days running, whose clinic note is accepted by name?",
+    "document": "Leave policy",
+    "snippet": "note from Dr. Patel"
+  },
+  {
+    "id": "m-parental",
+    "role": "member",
+    "question": "How long can the primary parent be away?",
+    "document": "Leave policy",
+    "snippet": "16 weeks of parental"
+  },
+  {
+    "id": "m-manager-cap",
+    "role": "member",
+    "question": "What is the biggest expense a manager is allowed to approve?",
+    "document": "Expense policy",
+    "snippet": "claim up to $250"
+  },
+  {
+    "id": "m-dinner",
+    "role": "member",
+    "question": "At what price per guest does a client meal need finance approval first?",
+    "document": "Expense policy",
+    "snippet": "over $75 per person"
+  },
+  {
+    "id": "m-mileage",
+    "role": "member",
+    "question": "How much is paid per mile for using your own car?",
+    "document": "Expense policy",
+    "snippet": "$0.67 per mile"
+  },
+  {
+    "id": "m-hotel",
+    "role": "member",
+    "question": "What is the most the company will pay for a hotel night in Portland?",
+    "document": "Expense policy",
+    "snippet": "$220 per night in"
+  },
+  {
+    "id": "m-laptop",
+    "role": "member",
+    "question": "How fast must a missing computer be reported, including on a weekend?",
+    "document": "Security policy",
+    "snippet": "IT will remote-lock the"
+  },
+  {
+    "id": "m-lock",
+    "role": "member",
+    "question": "How soon does the laptop screen lock if you walk away?",
+    "document": "Security policy",
+    "snippet": "locks after 5 minutes"
+  },
+  {
+    "id": "m-usb",
+    "role": "member",
+    "question": "Are staff allowed to use a USB stick for client files?",
+    "document": "Security policy",
+    "snippet": "USB storage drives are"
+  },
+  {
+    "id": "m-buddy",
+    "role": "member",
+    "question": "Who takes a new engineer to lunch on their first day?",
+    "document": "Onboarding guide",
+    "snippet": "2026 is Samir Okonkwo"
+  },
+  {
+    "id": "m-benefits",
+    "role": "member",
+    "question": "After which day can a new hire no longer enroll in benefits?",
+    "document": "Onboarding guide",
+    "snippet": "closes on day 30"
+  },
+  {
+    "id": "a-ic2",
+    "role": "admin",
+    "question": "What is the low end of pay for an engineering IC2 in Portland?",
+    "document": "Compensation bands",
+    "snippet": "$118,000 to $146,000"
+  },
+  {
+    "id": "a-midpoint",
+    "role": "admin",
+    "question": "Without a written reason, what should a new IC2 offer not go above?",
+    "document": "Compensation bands",
+    "snippet": "midpoint of $132,000"
+  },
+  {
+    "id": "a-higher-cap",
+    "role": "admin",
+    "question": "Who signs off on spending from just over the manager limit up to two thousand dollars?",
+    "document": "Compensation bands",
+    "snippet": "Spend from $251 to"
+  },
+  {
+    "id": "a-bonus-day",
+    "role": "admin",
+    "question": "Which day of the month do bonuses go out?",
+    "document": "Bonus review",
+    "snippet": "last Friday of April"
+  },
+  {
+    "id": "a-pool",
+    "role": "admin",
+    "question": "How much money is set aside for engineering bonuses this year?",
+    "document": "Bonus review",
+    "snippet": "pool is $48,000"
+  },
+  {
+    "id": "a-one-bonus",
+    "role": "admin",
+    "question": "What is the highest bonus one engineer can receive in this cycle?",
+    "document": "Bonus review",
+    "snippet": "may exceed $8,000"
+  },
+  {
+    "id": "a-move",
+    "role": "admin",
+    "question": "On what date does the support group begin reporting to Maya?",
+    "document": "Restructuring plan",
+    "snippet": "1 June 2026 the support"
+  },
+  {
+    "id": "a-severance",
+    "role": "admin",
+    "question": "How many weeks of pay do the two ending roles receive?",
+    "document": "Restructuring plan",
+    "snippet": "8 weeks of base"
+  },
+  {
+    "id": "n-bonus-day",
+    "role": "member",
+    "question": "Which day of the month do bonuses go out?",
+    "expect": "none"
+  },
+  {
+    "id": "n-pool",
+    "role": "member",
+    "question": "How much money is set aside for engineering bonuses this year?",
+    "expect": "none"
+  },
+  {
+    "id": "n-ic2",
+    "role": "member",
+    "question": "What is the low end of pay for an engineering IC2 in Portland?",
+    "expect": "none"
+  },
+  {
+    "id": "n-move",
+    "role": "member",
+    "question": "On what date does the support group begin reporting to Maya?",
+    "expect": "none"
+  }
+]

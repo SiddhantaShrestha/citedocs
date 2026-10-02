@@ -1,8 +1,6 @@
 import { Visibility, type Role } from "@prisma/client";
 import { extractText } from "unpdf";
-import { splitChunks } from "@/lib/chunk";
 import { prisma } from "@/lib/db";
-import { embedTexts, toVectorLiteral } from "@/lib/embed";
 
 const MAX_BYTES = 8 * 1024 * 1024;
 
@@ -51,37 +49,14 @@ export async function saveDocument(input: {
   }
 
   const title = input.title.trim() || "Untitled";
-  const chunks = splitChunks(text);
-  const embeddings = await embedTexts(chunks, "document");
 
-  return prisma.$transaction(async (tx) => {
-    const document = await tx.document.create({
-      data: {
-        teamId: membership.teamId,
-        title,
-        visibility: input.visibility,
-        text,
-      },
-    });
-
-    for (let position = 0; position < chunks.length; position++) {
-      const chunk = await tx.chunk.create({
-        data: {
-          documentId: document.id,
-          teamId: membership.teamId,
-          visibility: input.visibility,
-          position,
-          text: chunks[position],
-        },
-      });
-      await tx.$executeRawUnsafe(
-        `UPDATE "Chunk" SET embedding = $1::vector WHERE id = $2`,
-        toVectorLiteral(embeddings[position]),
-        chunk.id,
-      );
-    }
-
-    return document;
+  return prisma.document.create({
+    data: {
+      teamId: membership.teamId,
+      title,
+      visibility: input.visibility,
+      text,
+    },
   });
 }
 
