@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { extractText } from "unpdf";
+import { splitChunks } from "../lib/chunk";
 import { listVisibleDocuments, readUpload, saveDocument } from "../lib/documents";
 
 const prisma = new PrismaClient();
@@ -90,6 +91,33 @@ async function main() {
   const titles = visible.map((document) => document.title);
   if (titles.includes("Payroll notes") || !titles.includes("Team handbook")) {
     throw new Error(`Member saw the wrong documents: ${titles.join(", ")}`);
+  }
+
+  const long = splitChunks(`${"alpha ".repeat(200)}${"beta ".repeat(200)}`);
+  if (long.length < 2 || !long.at(-1)?.includes("beta")) {
+    throw new Error("Long text was not split into overlapping chunks.");
+  }
+
+  const stored = await prisma.$queryRaw<
+    { title: string; visibility: string; dims: number }[]
+  >`
+    SELECT d.title, c.visibility::text AS visibility, vector_dims(c.embedding) AS dims
+    FROM "Chunk" c
+    JOIN "Document" d ON d.id = c."documentId"
+    WHERE d.title IN ('Team handbook', 'Payroll notes')
+    ORDER BY d.title, c.position
+  `;
+  if (stored.length < 2) {
+    throw new Error("Expected a chunk for each demo document.");
+  }
+  for (const row of stored) {
+    if (row.dims !== 768) {
+      throw new Error(`${row.title} embedding has ${row.dims} dimensions.`);
+    }
+    const expected = row.title === "Payroll notes" ? "admins" : "team";
+    if (row.visibility !== expected) {
+      throw new Error(`${row.title} chunk visibility is ${row.visibility}.`);
+    }
   }
 
   console.log("Upload checks passed.");
