@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AskForm } from "@/app/ask/ask-form";
 import { UploadForm } from "@/app/documents/upload-form";
@@ -106,26 +107,31 @@ export default async function Home() {
                       const details = sourceDetails(source, documents, index + 1);
                       return (
                         <li key={source.id}>
-                          <Card className="text-base/relaxed [--card-spacing:--spacing(5)]">
-                            <CardHeader>
-                              <div className="flex items-start justify-between gap-4">
-                                <CardTitle className="font-sans text-base">
-                                  {source.title}
-                                </CardTitle>
-                                <div className="flex shrink-0 items-center gap-2">
-                                  {details.visibility ? (
-                                    <VisibilityBadge visibility={details.visibility} />
-                                  ) : null}
-                                  <Badge variant="outline">Chunk {details.chunkNumber}</Badge>
+                          <Link
+                            href={`/documents/${source.documentId}?chunk=${source.id}`}
+                            className="block"
+                          >
+                            <Card className="text-base/relaxed [--card-spacing:--spacing(5)]">
+                              <CardHeader>
+                                <div className="flex items-start justify-between gap-4">
+                                  <CardTitle className="font-sans text-base">
+                                    {source.title}
+                                  </CardTitle>
+                                  <div className="flex shrink-0 items-center gap-2">
+                                    {details.visibility ? (
+                                      <VisibilityBadge visibility={details.visibility} />
+                                    ) : null}
+                                    <Badge variant="outline">Chunk {details.chunkNumber}</Badge>
+                                  </div>
                                 </div>
-                              </div>
-                            </CardHeader>
-                            <CardContent>
-                              <blockquote className="border-l-2 border-accent pl-4 text-base leading-7 text-foreground">
-                                {preview(source.text)}
-                              </blockquote>
-                            </CardContent>
-                          </Card>
+                              </CardHeader>
+                              <CardContent>
+                                <blockquote className="border-l-2 border-accent pl-4 text-base leading-7 text-foreground">
+                                  {preview(source.text)}
+                                </blockquote>
+                              </CardContent>
+                            </Card>
+                          </Link>
                         </li>
                       );
                     })}
@@ -179,7 +185,12 @@ export default async function Home() {
                   className="flex items-center justify-between gap-3 px-4 py-3"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-medium">{document.title}</p>
+                    <Link
+                      href={`/documents/${document.id}`}
+                      className="block truncate text-sm font-medium"
+                    >
+                      {document.title}
+                    </Link>
                     <p className="text-sm text-muted-foreground">
                       {document._count.chunks === 1
                         ? "1 chunk"

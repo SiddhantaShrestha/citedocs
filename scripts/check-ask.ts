@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { askQuestion } from "../lib/ask";
 import { embedTexts, toVectorLiteral } from "../lib/embed";
 import { ingestDocument } from "../lib/ingest";
+import { visibleDocumentsWhere } from "../lib/permissions";
 import { searchChunks } from "../lib/retrieve";
 
 const prisma = new PrismaClient();
@@ -71,6 +72,36 @@ async function main() {
       throw new Error("A Demo user retrieved the other team's chunk.");
     }
   }
+  const otherTeamDocument = await prisma.document.create({
+    data: {
+      teamId: otherTeam.id,
+      title: "Oak Street handbook",
+      visibility: "team",
+      text: "The Oak Street office opens at 8.",
+    },
+  });
+  const memberView = visibleDocumentsWhere(member.memberships[0]);
+  const adminView = visibleDocumentsWhere(admin.memberships[0]);
+  const memberAdminsDoc = await prisma.document.findFirst({
+    where: { id: payroll.documentId, ...memberView },
+  });
+  if (memberAdminsDoc) {
+    throw new Error("A member loaded an admins document by id.");
+  }
+  const memberOtherTeam = await prisma.document.findFirst({
+    where: { id: otherTeamDocument.id, ...memberView },
+  });
+  if (memberOtherTeam) {
+    throw new Error("A member loaded a document from another team.");
+  }
+  const adminAdminsDoc = await prisma.document.findFirst({
+    where: { id: payroll.documentId, ...adminView },
+  });
+  if (!adminAdminsDoc) {
+    throw new Error("An admin could not load an admins document on their team.");
+  }
+  console.log("Document visibility checks passed.");
+
   await prisma.team.delete({ where: { id: otherTeam.id } });
   console.log("Other team stayed hidden from Demo.");
 

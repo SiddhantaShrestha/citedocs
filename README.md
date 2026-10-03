@@ -41,7 +41,7 @@ The init migration already runs `CREATE EXTENSION IF NOT EXISTS vector`. There i
 5. **Chunks and embeddings.** Split the document into chunks, store each chunk with its team and visibility, and save an embedding in pgvector.
 6. **Ask.** One question box. Retrieve similar chunks the current user is allowed to see, then generate an answer that cites those chunks.
 7. **Retrieval test.** A file of 20–30 questions. Each question names the chunk that should be found. A script scores whether that chunk showed up in the top results. This scores retrieval, not the wording of the answer.
-8. **Write-up.** After the app works, add a short "How we tested" section here, including one hard bug and how we fixed it.
+8. **Write-up.** Retrieval scores are in [How we tested](#how-we-tested).
 
 ## Permissions
 
@@ -83,8 +83,24 @@ We are not building per-user access on single paragraphs. If a document is `admi
 
 - Models run on your computer with [Ollama](https://ollama.com). No API key and no paid account.
 - Embeddings use `nomic-embed-text` (768 dimensions). Answers use `llama3.2`, a small local chat model.
-- Chunks are short and fixed-size, with a small overlap.
+- Chunks are 300 characters, with a small overlap. That size scored best for vector search.
 - Top results default to 5 chunks.
 - Demo data is seeded, including a couple of `admins` documents so the filter is obvious.
 
 The retrieval test only checks which chunk was found. It does not need the chat model. Answer quality will be lower than a paid model, and that is fine for this project.
+
+## How we tested
+
+41 questions, plus 4 checks that a member search must not return an admins chunk. 24 filler documents sit on the same team so the right chunk has more to compete with. The app searches with vectors only. Keyword search and hybrid search (reciprocal rank fusion of the two top-5 lists) are comparisons, not what a user gets.
+
+| Chunk size | Method | Hit@1 | Hit@5 | MRR |
+| --- | --- | --- | --- | --- |
+| 300 | Vector | 20/41 (48.8%) | 36/41 (87.8%) | 0.653 |
+| 300 | Keyword | 16/41 (39.0%) | 27/41 (65.9%) | 0.497 |
+| 300 | Hybrid | 21/41 (51.2%) | 34/41 (82.9%) | 0.642 |
+| 500 | Vector | 16/41 (39.0%) | 35/41 (85.4%) | 0.585 |
+| 500 | Keyword | 18/41 (43.9%) | 27/41 (65.9%) | 0.515 |
+| 800 | Vector | 7/41 (17.1%) | 33/41 (80.5%) | 0.435 |
+| 800 | Keyword | 21/41 (51.2%) | 32/41 (78.0%) | 0.603 |
+
+Smaller chunks helped vector search. Bigger chunks helped keyword search. Hybrid picked up one more first-place hit than vector search at 300 characters, and did worse on Hit@5 and MRR. This is 41 questions, so two or three hits move the percentages a lot. Read the gaps as a direction.

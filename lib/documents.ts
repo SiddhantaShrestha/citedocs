@@ -1,6 +1,7 @@
 import { Visibility, type Role } from "@prisma/client";
 import { extractText } from "unpdf";
 import { prisma } from "@/lib/db";
+import { visibleDocumentsWhere } from "@/lib/permissions";
 
 const MAX_BYTES = 8 * 1024 * 1024;
 
@@ -67,10 +68,7 @@ export async function listVisibleDocuments(
 
   return prisma.document.findMany({
     where: {
-      OR: memberships.map((membership) => ({
-        teamId: membership.teamId,
-        ...(membership.role === "member" ? { visibility: "team" as const } : {}),
-      })),
+      OR: memberships.map((membership) => visibleDocumentsWhere(membership)),
     },
     orderBy: { createdAt: "desc" },
     select: {

@@ -1,0 +1,31 @@
+﻿hit m-fridge Employee handbook 0.297, Onboarding guide 0.342, Leave policy 0.349, Employee handbook 0.352, Security policy 0.381
+hit m-guest Employee handbook 0.338, Security policy 0.355, Onboarding guide 0.359, Security policy 0.360, Employee handbook 0.381
+hit m-monday Leave policy 0.352, Employee handbook 0.359, Leave policy 0.360, Employee handbook 0.385, Leave policy 0.390
+hit m-probation Employee handbook 0.213, Onboarding guide 0.276, Leave policy 0.383, Leave policy 0.391, Onboarding guide 0.400
+hit m-leave-days Leave policy 0.281, Employee handbook 0.311, Employee handbook 0.331, Leave policy 0.340, Onboarding guide 0.359
+hit m-carry Leave policy 0.307, Onboarding guide 0.339, Employee handbook 0.343, Employee handbook 0.364, Leave policy 0.373
+hit m-sick Leave policy 0.274, Leave policy 0.354, Employee handbook 0.389, Onboarding guide 0.402, Leave policy 0.407
+hit m-doctor Leave policy 0.338, Leave policy 0.369, Onboarding guide 0.381, Leave policy 0.393, Employee handbook 0.400
+hit m-parental Leave policy 0.259, Leave policy 0.370, Employee handbook 0.387, Onboarding guide 0.391, Employee handbook 0.428
+hit m-manager-cap Expense policy 0.322, Employee handbook 0.345, Expense policy 0.357, Employee handbook 0.412, Leave policy 0.440
+hit m-dinner Expense policy 0.258, Employee handbook 0.361, Expense policy 0.364, Employee handbook 0.415, Expense policy 0.419
+hit m-mileage Expense policy 0.348, Expense policy 0.408, Employee handbook 0.418, Onboarding guide 0.459, Employee handbook 0.470
+hit m-hotel Expense policy 0.278, Employee handbook 0.359, Expense policy 0.388, Employee handbook 0.411, Leave policy 0.412
+hit m-laptop Employee handbook 0.341, Security policy 0.342, Onboarding guide 0.348, Expense policy 0.381, Leave policy 0.425
+hit m-lock Security policy 0.300, Employee handbook 0.321, Onboarding guide 0.327, Security policy 0.369, Leave policy 0.403
+hit m-usb Security policy 0.396, Onboarding guide 0.420, Employee handbook 0.436, Security policy 0.442, Employee handbook 0.443
+hit m-buddy Onboarding guide 0.322, Onboarding guide 0.326, Employee handbook 0.351, Onboarding guide 0.400, Employee handbook 0.410
+hit m-benefits Onboarding guide 0.261, Employee handbook 0.295, Employee handbook 0.325, Leave policy 0.327, Onboarding guide 0.327
+hit a-ic2 Compensation bands 0.288, Compensation bands 0.398, Bonus review 0.444, Expense policy 0.446, Employee handbook 0.452
+hit a-midpoint Compensation bands 0.307, Expense policy 0.416, Bonus review 0.416, Onboarding guide 0.425, Compensation bands 0.427
+miss a-higher-cap Employee handbook 0.335, Compensation bands 0.347, Expense policy 0.358, Expense policy 0.368, Employee handbook 0.379
+hit a-bonus-day Bonus review 0.215, Engineering bonus review 0.256, Bonus review 0.258, Bonus review 0.261, Employee handbook 0.307
+hit a-pool Engineering bonus review 0.186, Bonus review 0.192, Bonus review 0.306, Compensation bands 0.326, Bonus review 0.346
+hit a-one-bonus Engineering bonus review 0.224, Bonus review 0.229, Bonus review 0.333, Compensation bands 0.361, Onboarding guide 0.399
+hit a-move Restructuring plan 0.217, Employee handbook 0.347, Onboarding guide 0.382, Bonus review 0.399, Restructuring plan 0.400
+hit a-severance Restructuring plan 0.305, Leave policy 0.325, Restructuring plan 0.326, Employee handbook 0.341, Compensation bands 0.359
+n-bonus-day none Employee handbook, Leave policy, Onboarding guide, Team handbook, Leave policy
+n-pool none Onboarding guide, Expense policy, Employee handbook, Expense policy, Employee handbook
+n-ic2 none Expense policy, Employee handbook, Leave policy, Onboarding guide, Expense policy
+n-move none Employee handbook, Onboarding guide, Security policy, Leave policy, Onboarding guide
+Hit@5 25/26 (96.2%)

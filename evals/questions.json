@@ -23,7 +23,7 @@
   {
     "id": "m-probation",
     "role": "member",
-    "question": "How long are you on probation after your start date?",
+    "question": "How long is the trial stretch once someone begins?",
     "document": "Employee handbook",
     "snippet": "Probation lasts 90 days"
   },
@@ -65,14 +65,14 @@
   {
     "id": "m-manager-cap",
     "role": "member",
-    "question": "What is the biggest expense a manager is allowed to approve?",
+    "question": "What is the largest amount a boss can sign off on a receipt?",
     "document": "Expense policy",
     "snippet": "claim up to $250"
   },
   {
     "id": "m-dinner",
     "role": "member",
-    "question": "At what price per guest does a client meal need finance approval first?",
+    "question": "When a table with a customer gets pricey for each seat, who must say yes before it is booked?",
     "document": "Expense policy",
     "snippet": "over $75 per person"
   },
@@ -107,7 +107,7 @@
   {
     "id": "m-usb",
     "role": "member",
-    "question": "Are staff allowed to use a USB stick for client files?",
+    "question": "Can people copy customer work onto a little plug-in drive?",
     "document": "Security policy",
     "snippet": "USB storage drives are"
   },
@@ -121,7 +121,7 @@
   {
     "id": "m-benefits",
     "role": "member",
-    "question": "After which day can a new hire no longer enroll in benefits?",
+    "question": "When does the window shut for signing up for health cover after joining?",
     "document": "Onboarding guide",
     "snippet": "closes on day 30"
   },
@@ -135,7 +135,7 @@
   {
     "id": "a-midpoint",
     "role": "admin",
-    "question": "Without a written reason, what should a new IC2 offer not go above?",
+    "question": "A fresh level-two package should stay under which figure unless someone explains why in writing?",
     "document": "Compensation bands",
     "snippet": "midpoint of $132,000"
   },
@@ -163,7 +163,7 @@
   {
     "id": "a-one-bonus",
     "role": "admin",
-    "question": "What is the highest bonus one engineer can receive in this cycle?",
+    "question": "What is the ceiling for any individual extra payout in this round?",
     "document": "Bonus review",
     "snippet": "may exceed $8,000"
   },
@@ -177,7 +177,112 @@
   {
     "id": "a-severance",
     "role": "admin",
-    "question": "How many weeks of pay do the two ending roles receive?",
+    "question": "Jobs that are closing come with a goodbye salary for how long?",
+    "document": "Restructuring plan",
+    "snippet": "8 weeks of base"
+  },
+  {
+    "id": "h-fridge",
+    "role": "member",
+    "question": "What happens to food in the cold box if nobody wrote a name on it, and on which afternoon?",
+    "document": "Employee handbook",
+    "snippet": "emptied every Friday at"
+  },
+  {
+    "id": "h-guest",
+    "role": "member",
+    "question": "A person stopping by from outside needs the front desk to hear before which hour?",
+    "document": "Employee handbook",
+    "snippet": "email Maya before 9:00"
+  },
+  {
+    "id": "h-monday",
+    "role": "member",
+    "question": "There is one weekday when staying home is off the table. Which?",
+    "document": "Employee handbook",
+    "snippet": "Monday is an office"
+  },
+  {
+    "id": "h-parent",
+    "role": "member",
+    "question": "The person mainly looking after a new child can stay out for how long?",
+    "document": "Leave policy",
+    "snippet": "16 weeks of parental"
+  },
+  {
+    "id": "h-carry",
+    "role": "member",
+    "question": "Time off you did not use last year stops counting on which date?",
+    "document": "Leave policy",
+    "snippet": "expire on 31 March"
+  },
+  {
+    "id": "h-dinner",
+    "role": "member",
+    "question": "Who has to bless a pricey customer sit-down before anyone reserves the table?",
+    "document": "Expense policy",
+    "snippet": "over $75 per person"
+  },
+  {
+    "id": "h-cap",
+    "role": "member",
+    "question": "Past a modest receipt, the boss cannot finish it alone and the money group has to step in. Where is that line?",
+    "document": "Expense policy",
+    "snippet": "claim up to $250"
+  },
+  {
+    "id": "h-lock",
+    "role": "member",
+    "question": "Step away from the machine and the screen goes dark after how many minutes?",
+    "document": "Security policy",
+    "snippet": "locks after 5 minutes"
+  },
+  {
+    "id": "h-laptop",
+    "role": "member",
+    "question": "A missing machine, even on a Saturday night, has to be flagged how quickly?",
+    "document": "Security policy",
+    "snippet": "IT will remote-lock the"
+  },
+  {
+    "id": "h-buddy",
+    "role": "member",
+    "question": "A fresh builder eats with which coworker on the opening day?",
+    "document": "Onboarding guide",
+    "snippet": "2026 is Samir Okonkwo"
+  },
+  {
+    "id": "h-higher",
+    "role": "admin",
+    "question": "Once a purchase is past what a boss can okay, but still under a couple thousand, whose sign-off is required?",
+    "document": "Compensation bands",
+    "snippet": "Spend from $251 to"
+  },
+  {
+    "id": "h-bonus-day",
+    "role": "admin",
+    "question": "Extra yearly pay for the builders lands on which weekday, late in a spring month?",
+    "document": "Bonus review",
+    "snippet": "last Friday of April"
+  },
+  {
+    "id": "h-pool",
+    "role": "admin",
+    "question": "How big is the pot of extra builder pay for this cycle?",
+    "document": "Bonus review",
+    "snippet": "pool is $48,000"
+  },
+  {
+    "id": "h-move",
+    "role": "admin",
+    "question": "The folks who look after customers pick up a new boss at the start of summer. When?",
+    "document": "Restructuring plan",
+    "snippet": "1 June 2026 the support"
+  },
+  {
+    "id": "h-severance",
+    "role": "admin",
+    "question": "When a post is shut down, the farewell paycheck covers what stretch of time?",
     "document": "Restructuring plan",
     "snippet": "8 weeks of base"
   },

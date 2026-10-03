@@ -1,0 +1,54 @@
+﻿Snippet check passed for 41 questions.
+Corpus: member can search 34 chunks, admin 51.
+m-fridge FLAG overlap 67% vector 2 keyword 1
+m-guest overlap 33% vector 2 keyword 2
+m-monday overlap 43% vector miss keyword 1
+m-probation overlap 0% vector 4 keyword miss
+m-leave-days overlap 56% vector 1 keyword 1
+m-carry overlap 50% vector 2 keyword 1
+m-sick overlap 40% vector 1 keyword 3
+m-doctor overlap 33% vector 2 keyword 1
+m-parental overlap 25% vector 1 keyword 1
+m-manager-cap overlap 33% vector 2 keyword 1
+m-dinner overlap 20% vector 2 keyword 1
+m-mileage overlap 43% vector 2 keyword 1
+m-hotel overlap 57% vector 1 keyword 1
+m-laptop overlap 29% vector 3 keyword 1
+m-lock overlap 50% vector 5 keyword 1
+m-usb overlap 38% vector 2 keyword 1
+m-buddy overlap 50% vector 2 keyword 1
+m-benefits overlap 0% vector 2 keyword miss
+a-ic2 overlap 33% vector 1 keyword 1
+a-midpoint overlap 15% vector miss keyword 5
+a-higher-cap overlap 11% vector miss keyword 5
+a-bonus-day overlap 25% vector 4 keyword miss
+a-pool overlap 29% vector 2 keyword 4
+a-one-bonus overlap 0% vector 3 keyword miss
+a-move overlap 33% vector 1 keyword 2
+a-severance overlap 17% vector 2 keyword 5
+h-fridge overlap 38% vector 5 keyword 1
+h-guest overlap 13% vector miss keyword miss
+h-monday overlap 14% vector miss keyword 1
+h-parent overlap 13% vector 1 keyword miss
+h-carry overlap 38% vector 2 keyword 1
+h-dinner overlap 11% vector 2 keyword 3
+h-cap overlap 8% vector 4 keyword 1
+h-lock overlap 38% vector miss keyword 1
+h-laptop overlap 13% vector 2 keyword 2
+h-buddy overlap 17% vector miss keyword 1
+h-higher overlap 0% vector miss keyword miss
+h-bonus-day overlap 22% vector 3 keyword 5
+h-pool overlap 33% vector 2 keyword 2
+h-move overlap 0% vector 3 keyword miss
+h-severance overlap 0% vector 3 keyword miss
+n-bonus-day none vector [Employee handbook, Leave policy, Remote week trial, Onboarding guide, November health cover reminder] keyword [Employee handbook, Leave policy, Employee handbook, Security policy, Onboarding guide]
+n-pool none vector [Onboarding guide, Expense policy, Employee handbook, Buddy rotation board, Expense policy] keyword [Leave policy, November health cover reminder, Employee handbook, Leave policy, Buddy rotation board]
+n-ic2 none vector [Expense policy, Employee handbook, Austin office routine, Leave policy, Remote week trial] keyword [Expense policy, Expense policy, Employee handbook, Buddy rotation board, Pantry label poster]
+n-move none vector [Employee handbook, Sick day call tree, Onboarding guide, Holiday shutdown 2027, Thirty and sixty day chats] keyword [Employee handbook, Onboarding guide, Leave policy, Onboarding guide, Security policy]
+None checks: 4. Leak guard ran on every member question.
+Vector Hit@1 7/41 (17.1%)  MRR 0.435
+Vector Hit@3 28/41 (68.3%)
+Vector Hit@5 33/41 (80.5%) (footnote)
+Keyword Hit@1 21/41 (51.2%)  MRR 0.603
+Keyword Hit@3 27/41 (65.9%)
+Keyword Hit@5 32/41 (78.0%) (footnote)

@@ -14,7 +14,9 @@ export async function askQuestion(userId: string, question: string) {
   });
 
   const [embedding] = await embedTexts([trimmed], "query");
-  const sources = await searchChunks(memberships, toVectorLiteral(embedding));
+  const sources = await attachDocumentIds(
+    await searchChunks(memberships, toVectorLiteral(embedding)),
+  );
   const answer = await writeAnswer(trimmed, sources);
 
   const saved = await prisma.question.create({
@@ -40,6 +42,23 @@ export async function latestAnswer(userId: string) {
     where: { userId },
     select: { teamId: true, role: true },
   });
-  const sources = await chunksById(memberships, saved.chunkIds);
+  const sources = await attachDocumentIds(
+    await chunksById(memberships, saved.chunkIds),
+  );
   return { question: saved, sources };
+}
+
+async function attachDocumentIds<T extends { id: string }>(sources: T[]) {
+  if (sources.length === 0) return [];
+
+  const rows = await prisma.chunk.findMany({
+    where: { id: { in: sources.map((source) => source.id) } },
+    select: { id: true, documentId: true },
+  });
+  const documentIds = new Map(rows.map((row) => [row.id, row.documentId]));
+
+  return sources.flatMap((source) => {
+    const documentId = documentIds.get(source.id);
+    return documentId ? [{ ...source, documentId }] : [];
+  });
 }
