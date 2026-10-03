@@ -1,4 +1,4 @@
-const CHAT_URL = "http://127.0.0.1:11434/api/chat";
+import { generate } from "@/lib/model";
 
 const UNKNOWN = "I don't know. That is not in the documents you can see.";
 
@@ -42,39 +42,12 @@ export async function writeAnswer(
     .map((line, index) => `${index + 1}. ${line.sentence}`)
     .join("\n");
 
-  let response: Response;
-  try {
-    response = await fetch(CHAT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "llama3.2",
-        stream: false,
-        options: { temperature: 0 },
-        messages: [
-          {
-            role: "system",
-            content:
-              "Reply with only the number of the sentence that answers the question. If none of them answer it, reply none.",
-          },
-          {
-            role: "user",
-            content: `${numbered}\n\nQuestion: ${question}`,
-          },
-        ],
-      }),
-      signal: AbortSignal.timeout(120_000),
-    });
-  } catch {
-    throw new Error("Ollama is not running. Start it, then try again.");
-  }
-
-  if (!response.ok) {
-    throw new Error("Ollama could not write an answer. Is llama3.2 pulled?");
-  }
-
-  const body = (await response.json()) as { message?: { content?: string } };
-  const raw = cleanAnswer(body.message?.content ?? "");
+  const raw = cleanAnswer(
+    await generate(
+      "Reply with only the number of the sentence that answers the question. If none of them answer it, reply none.",
+      `${numbered}\n\nQuestion: ${question}`,
+    ),
+  );
   if (/^none\b/i.test(raw)) return UNKNOWN;
 
   const match = raw.match(/\d+/);

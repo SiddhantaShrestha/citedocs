@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cleanAnswer } from "@/lib/answer";
 import { latestAnswer } from "@/lib/ask";
 import { splitChunks } from "@/lib/chunk";
+import { isDemoReadonly } from "@/lib/demo";
 import { listVisibleDocuments } from "@/lib/documents";
 import { getCurrentUser } from "@/lib/session";
 
@@ -58,6 +59,7 @@ export default async function Home() {
   if (!user) redirect("/login");
 
   const isAdmin = user.memberships.some((membership) => membership.role === "admin");
+  const canUpload = isAdmin && !isDemoReadonly();
   const documents = await listVisibleDocuments(user.memberships);
   const latest = await latestAnswer(user.id);
   const teamName = user.memberships[0]?.team.name ?? null;
@@ -171,7 +173,7 @@ export default async function Home() {
               <CardContent className="flex flex-col gap-1">
                 <p className="text-base text-foreground">No documents yet.</p>
                 <p className="text-sm text-muted-foreground">
-                  {isAdmin
+                  {canUpload
                     ? "Upload a text file or PDF to start."
                     : "An admin has not shared a file you can see."}
                 </p>
@@ -202,7 +204,7 @@ export default async function Home() {
               ))}
             </ul>
           )}
-          {isAdmin ? (
+          {canUpload ? (
             <div className="flex flex-col gap-5 border border-border bg-card px-5 py-5">
               <h3 className="text-base font-semibold">Upload</h3>
               <UploadForm />

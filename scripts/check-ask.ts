@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { askQuestion } from "../lib/ask";
-import { embedTexts, toVectorLiteral } from "../lib/embed";
+import { embed, toVectorLiteral } from "../lib/embed";
 import { ingestDocument } from "../lib/ingest";
 import { visibleDocumentsWhere } from "../lib/permissions";
 import { searchChunks } from "../lib/retrieve";
@@ -24,7 +24,7 @@ async function main() {
     where: { document: { title: "Team handbook" } },
   });
 
-  const [payrollVector] = await embedTexts([payroll.text], "query");
+  const [payrollVector] = await embed([payroll.text], "query");
   const memberHits = await searchChunks(
     member.memberships,
     toVectorLiteral(payrollVector),
@@ -64,7 +64,7 @@ async function main() {
   const otherChunk = await prisma.chunk.findFirstOrThrow({
     where: { documentId: otherDocument.id },
   });
-  const [otherVector] = await embedTexts([otherChunk.text], "query");
+  const [otherVector] = await embed([otherChunk.text], "query");
   const otherLiteral = toVectorLiteral(otherVector);
   for (const person of [member, admin]) {
     const hits = await searchChunks(person.memberships, otherLiteral);
@@ -105,7 +105,7 @@ async function main() {
   await prisma.team.delete({ where: { id: otherTeam.id } });
   console.log("Other team stayed hidden from Demo.");
 
-  const [officeVector] = await embedTexts(["When does the office open?"], "query");
+  const [officeVector] = await embed(["When does the office open?"], "query");
   const officeHits = await searchChunks(
     member.memberships,
     toVectorLiteral(officeVector),

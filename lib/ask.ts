@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
-import { embedTexts, toVectorLiteral } from "@/lib/embed";
+import { embed, toVectorLiteral } from "@/lib/embed";
 import { writeAnswer } from "@/lib/answer";
+import { assertIndexMatchesProvider } from "@/lib/index-guard";
+import { assertAskAllowed } from "@/lib/rate-limit";
 import { chunksById, searchChunks } from "@/lib/retrieve";
 
 export async function askQuestion(userId: string, question: string) {
@@ -8,12 +10,15 @@ export async function askQuestion(userId: string, question: string) {
   if (!trimmed) throw new Error("Enter a question.");
   if (trimmed.length > 500) throw new Error("Question is too long.");
 
+  await assertIndexMatchesProvider();
+  await assertAskAllowed(userId);
+
   const memberships = await prisma.membership.findMany({
     where: { userId },
     select: { teamId: true, role: true },
   });
 
-  const [embedding] = await embedTexts([trimmed], "query");
+  const [embedding] = await embed([trimmed], "query");
   const sources = await attachDocumentIds(
     await searchChunks(memberships, toVectorLiteral(embedding)),
   );

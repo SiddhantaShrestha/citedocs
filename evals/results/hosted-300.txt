@@ -1,0 +1,57 @@
+﻿Snippet check passed for 41 questions.
+Corpus: member can search 67 chunks, admin 101.
+m-fridge overlap 33% vector 2 keyword 2 hybrid 2
+m-guest overlap 33% vector 1 keyword 2 hybrid 1
+m-monday overlap 43% vector 2 keyword 1 hybrid 2
+m-probation overlap 0% vector miss keyword miss hybrid miss
+m-leave-days overlap 33% vector 1 keyword 1 hybrid 1
+m-carry overlap 38% vector 1 keyword 1 hybrid 1
+m-sick overlap 40% vector 2 keyword 2 hybrid 2
+m-doctor overlap 33% vector 1 keyword 1 hybrid 1
+m-parental overlap 25% vector 1 keyword 1 hybrid 1
+m-manager-cap overlap 17% vector 1 keyword miss hybrid 3
+m-dinner overlap 10% vector miss keyword 2 hybrid 4
+m-mileage overlap 43% vector 1 keyword 1 hybrid 1
+m-hotel overlap 43% vector 1 keyword 1 hybrid 1
+m-laptop overlap 29% vector 2 keyword 1 hybrid 2
+m-lock overlap 50% vector 1 keyword 1 hybrid 1
+m-usb overlap 38% vector 1 keyword 1 hybrid 1
+m-buddy overlap 33% vector 3 keyword 2 hybrid 3
+m-benefits overlap 0% vector 2 keyword miss hybrid 2
+a-ic2 overlap 33% vector 1 keyword 1 hybrid 1
+a-midpoint overlap 15% vector miss keyword 4 hybrid miss
+a-higher-cap overlap 0% vector 1 keyword 5 hybrid 1
+a-bonus-day overlap 25% vector 2 keyword miss hybrid 4
+a-pool overlap 29% vector 1 keyword 5 hybrid 1
+a-one-bonus overlap 0% vector 2 keyword miss hybrid 3
+a-move overlap 33% vector 2 keyword 1 hybrid 2
+a-severance overlap 0% vector 2 keyword miss hybrid 3
+h-fridge overlap 25% vector 2 keyword 1 hybrid 1
+h-guest overlap 0% vector 1 keyword miss hybrid 2
+h-monday overlap 14% vector 3 keyword 2 hybrid 1
+h-parent overlap 13% vector 1 keyword miss hybrid 2
+h-carry overlap 25% vector 1 keyword 3 hybrid 1
+h-dinner overlap 11% vector miss keyword 5 hybrid miss
+h-cap overlap 0% vector 4 keyword miss hybrid miss
+h-lock overlap 38% vector 1 keyword 1 hybrid 1
+h-laptop overlap 13% vector 2 keyword 1 hybrid 1
+h-buddy overlap 17% vector 5 keyword 1 hybrid 1
+h-higher overlap 0% vector 1 keyword miss hybrid 2
+h-bonus-day overlap 11% vector 1 keyword miss hybrid 1
+h-pool overlap 0% vector miss keyword miss hybrid miss
+h-move overlap 0% vector 4 keyword miss hybrid miss
+h-severance overlap 0% vector 1 keyword miss hybrid 2
+n-bonus-day none vector [Employee handbook, Leave policy, Leave policy, Employee handbook, Onboarding guide] keyword [Employee handbook, Leave policy, Employee handbook, Leave policy, Onboarding guide] hybrid [Employee handbook, Leave policy, Leave policy, Employee handbook, Employee handbook]
+n-pool none vector [Employee handbook, Leave policy, Onboarding guide, Expense policy, Expense policy] keyword [Leave policy, November health cover reminder, Travel booking desk, Badge reprint rules, Contractor driving notes] hybrid [Employee handbook, Leave policy, Leave policy, November health cover reminder, Onboarding guide]
+n-ic2 none vector [Leave policy, Badge reprint rules, Austin office routine, Expense policy, Austin overnight stays] keyword [Expense policy, Employee handbook, Denver visitor log, Remote week trial, Denver visitor log] hybrid [Expense policy, Leave policy, Badge reprint rules, Employee handbook, Austin office routine]
+n-move none vector [Employee handbook, Austin office routine, Remote week trial, Onboarding guide, Onboarding guide] keyword [Leave policy, Employee handbook, Employee handbook, Employee handbook, Contractor driving notes] hybrid [Employee handbook, Leave policy, Austin office routine, Remote week trial, Employee handbook]
+None checks: 4. Leak guard ran on every member question.
+Vector Hit@1 20/41 (48.8%)  MRR 0.655
+Vector Hit@3 33/41 (80.5%)
+Vector Hit@5 36/41 (87.8%) (footnote)
+Keyword Hit@1 16/41 (39.0%)  MRR 0.492
+Keyword Hit@3 23/41 (56.1%)
+Keyword Hit@5 27/41 (65.9%) (footnote)
+Hybrid Hit@1 19/41 (46.3%)  MRR 0.630
+Hybrid Hit@3 33/41 (80.5%)
+Hybrid Hit@5 35/41 (85.4%) (footnote)

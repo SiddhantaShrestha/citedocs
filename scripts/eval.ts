@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { Prisma, type Role } from "@prisma/client";
 import { prisma } from "../lib/db";
-import { embedTexts, toVectorLiteral } from "../lib/embed";
+import { embed, toVectorLiteral } from "../lib/embed";
+import { assertIndexMatchesProvider } from "../lib/index-guard";
 import { searchChunks } from "../lib/retrieve";
 
 type EvalQuestion = {
@@ -128,6 +129,7 @@ async function main() {
     }
   }
   console.log(`Snippet check passed for ${scoredQuestions.length} questions.`);
+  await assertIndexMatchesProvider();
 
   const adminChunkIds = new Set(
     (
@@ -169,7 +171,7 @@ async function main() {
   let noneCount = 0;
 
   for (const q of questions) {
-    const [embedding] = await embedTexts([q.question], "query");
+    const [embedding] = await embed([q.question], "query");
     const vectorHits = await searchChunks(users[q.role].memberships, toVectorLiteral(embedding));
     const vector: Ranked[] = vectorHits.map((hit) => ({ chunkId: hit.id, title: hit.title }));
     const keyword = await keywordSearch(users[q.role].memberships, q.question);

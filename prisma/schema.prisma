@@ -66,15 +66,16 @@ model Document {
 }
 
 model Chunk {
-  id         String                      @id @default(cuid())
-  documentId String
-  teamId     String
-  visibility Visibility
-  position   Int
-  text       String
-  embedding  Unsupported("vector(768)")?
-  document   Document                    @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  team       Team                        @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  id              String                      @id @default(cuid())
+  documentId      String
+  teamId          String
+  visibility      Visibility
+  position        Int
+  text            String
+  embeddingModel  String?
+  embedding       Unsupported("vector(768)")?
+  document        Document                    @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  team            Team                        @relation(fields: [teamId], references: [id], onDelete: Cascade)
 
   @@index([teamId, visibility])
 }

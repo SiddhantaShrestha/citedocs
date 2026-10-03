@@ -19,8 +19,12 @@ Open http://localhost:3000
 
 Both demo accounts use the password `citedocs`.
 
+Ollama is the default. To call Gemini instead, set `MODEL_PROVIDER=hosted` and `GEMINI_API_KEY` in `.env`, then re-index. Only `embed()` and `generate()` talk to a model.
+
 - `admin@citedocs.test` is an admin on the Demo team.
 - `member@citedocs.test` is a member on the Demo team.
+
+Uploads work locally. On the public demo, set `DEMO_READONLY=true` so visitors cannot add files. Production turns uploads off unless you set `DEMO_READONLY=false`.
 
 The init migration already runs `CREATE EXTENSION IF NOT EXISTS vector`. There is no vector index on purpose.
 
@@ -57,7 +61,7 @@ We are not building per-user access on single paragraphs. If a document is `admi
 ## Decisions
 
 - The embedding column is `vector(768)` via `Unsupported("vector(768)")`. Prisma does not query that column. Similarity search uses `prisma.$queryRaw`. Every other query stays normal Prisma.
-- No vector index in the demo. pgvector can use an HNSW index before the permission filter, so a member can get fewer than 5 rows, or none, when the nearest chunks are `admins`. An exact scan avoids that. This is the hard-bug write-up: show the failure, then the fix.
+- No vector index in the demo. pgvector can use an HNSW index before the permission filter, so a member can get fewer than 5 rows, or none, when the nearest chunks are `admins`. An exact scan avoids that.
 - Every ask request reads role and team from the session and membership on the server. The client does not send them.
 - One automated test seeds an `admins` chunk whose text is the question, asks as a member, and asserts that chunk never comes back.
 - Visibility is copied onto chunks at upload. Editing visibility is out of scope. If we add it later, the document and its chunks must update in the same transaction.
@@ -81,8 +85,12 @@ We are not building per-user access on single paragraphs. If a document is `admi
 
 ## Defaults
 
-- Models run on your computer with [Ollama](https://ollama.com). No API key and no paid account.
-- Embeddings use `nomic-embed-text` (768 dimensions). Answers use `llama3.2`, a small local chat model.
+- `MODEL_PROVIDER` picks the models. `ollama` is the default and runs on your computer. `hosted` uses Gemini.
+- Ollama embeddings are `nomic-embed-text`. Answers use `llama3.2`.
+- Hosted embeddings are `gemini-embedding-001`, cut to 768 dimensions so the database column stays the same. Answers use `gemini-2.5-flash`.
+- Gemini's free tier covers both. Paid prices are $0.15 per million embedding tokens, and $0.30 in plus $2.50 out per million for Flash. Free-tier text may be used to improve Google's products. Embedding limits are about 100 requests a minute and 1,000 a day. Flash is tighter, about 10 requests a minute and 250 a day. Both vary by account.
+- Questions stop at 6 a minute and 40 a day for one account, and 200 a day for the whole demo. The shared logins mean the account cap is shared by every visitor. Uploads, when they are on, stop at 6 an hour and 20 a day.
+- Each chunk stores the embedding model name. If that name does not match `MODEL_PROVIDER`, asking is refused until you re-index. The two embedding models are not interchangeable.
 - Chunks are 300 characters, with a small overlap. That size scored best for vector search.
 - Top results default to 5 chunks.
 - Demo data is seeded, including a couple of `admins` documents so the filter is obvious.
@@ -95,12 +103,15 @@ The retrieval test only checks which chunk was found. It does not need the chat 
 
 | Chunk size | Method | Hit@1 | Hit@5 | MRR |
 | --- | --- | --- | --- | --- |
-| 300 | Vector | 20/41 (48.8%) | 36/41 (87.8%) | 0.653 |
+| 300 | Local vectors | 20/41 (48.8%) | 36/41 (87.8%) | 0.653 |
 | 300 | Keyword | 16/41 (39.0%) | 27/41 (65.9%) | 0.497 |
 | 300 | Hybrid | 21/41 (51.2%) | 34/41 (82.9%) | 0.642 |
+| 300 | Gemini vectors | 20/41 (48.8%) | 36/41 (87.8%) | 0.655 |
 | 500 | Vector | 16/41 (39.0%) | 35/41 (85.4%) | 0.585 |
 | 500 | Keyword | 18/41 (43.9%) | 27/41 (65.9%) | 0.515 |
 | 800 | Vector | 7/41 (17.1%) | 33/41 (80.5%) | 0.435 |
 | 800 | Keyword | 21/41 (51.2%) | 32/41 (78.0%) | 0.603 |
 
-Smaller chunks helped vector search. Bigger chunks helped keyword search. Hybrid picked up one more first-place hit than vector search at 300 characters, and did worse on Hit@5 and MRR. This is 41 questions, so two or three hits move the percentages a lot. Read the gaps as a direction.
+Smaller chunks helped vector search. Bigger chunks helped keyword search. Hybrid picked up one more first-place hit than vector search at 300 characters, and did worse on Hit@5 and MRR. Gemini embeddings, on the same 41 questions, tied the local model: Hit@1 20/41 and Hit@5 36/41, with MRR 0.655 against 0.653. This is 41 questions, so two or three hits move the percentages a lot. Read the gaps as a direction.
+
+One bug was in the answer, not the search. An admin asked when engineering bonuses are paid. Retrieval found the right chunk, which says bonuses are paid on the last Friday of April. llama3.2 rewrote that sentence and mixed in other facts, so the answer contradicted the document. Telling the model to copy one sentence still produced a mix. The app now numbers the sentences in the retrieved chunks, asks the model only for a sentence number, and prints that exact sentence itself.

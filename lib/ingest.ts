@@ -1,6 +1,7 @@
 import { splitChunks } from "@/lib/chunk";
 import { prisma } from "@/lib/db";
-import { embedTexts, toVectorLiteral } from "@/lib/embed";
+import { embed, toVectorLiteral } from "@/lib/embed";
+import { embeddingModelName } from "@/lib/model";
 
 export async function ingestDocument(documentId: string) {
   const document = await prisma.document.findUnique({
@@ -15,7 +16,7 @@ export async function ingestDocument(documentId: string) {
     throw new Error("This document has no text.");
   }
 
-  const embeddings = await embedTexts(chunks, "document");
+  const embeddings = await embed(chunks, "document");
 
   await prisma.$transaction(async (tx) => {
     await tx.chunk.deleteMany({ where: { documentId } });
@@ -28,6 +29,7 @@ export async function ingestDocument(documentId: string) {
           visibility: document.visibility,
           position,
           text: chunks[position],
+          embeddingModel: embeddingModelName(),
         },
       });
       await tx.$executeRawUnsafe(
