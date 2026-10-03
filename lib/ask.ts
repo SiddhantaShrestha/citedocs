@@ -19,10 +19,11 @@ export async function askQuestion(userId: string, question: string) {
   });
 
   const [embedding] = await embed([trimmed], "query");
-  const sources = await attachDocumentIds(
+  const retrieved = await attachDocumentIds(
     await searchChunks(memberships, toVectorLiteral(embedding)),
   );
-  const answer = await writeAnswer(trimmed, sources);
+  const { answer, cited } = await writeAnswer(trimmed, retrieved);
+  const sources = cited.length ? [...new Set(cited)].map((i) => retrieved[i]) : [];
 
   const saved = await prisma.question.create({
     data: {
