@@ -3,7 +3,7 @@ import { embed, toVectorLiteral } from "@/lib/embed";
 import { writeAnswer } from "@/lib/answer";
 import { assertIndexMatchesProvider } from "@/lib/index-guard";
 import { assertAskAllowed } from "@/lib/rate-limit";
-import { chunksById, searchChunks } from "@/lib/retrieve";
+import { searchChunks } from "@/lib/retrieve";
 
 export async function askQuestion(userId: string, question: string) {
   const trimmed = question.trim();
@@ -34,23 +34,6 @@ export async function askQuestion(userId: string, question: string) {
     },
   });
 
-  return { question: saved, sources };
-}
-
-export async function latestAnswer(userId: string) {
-  const saved = await prisma.question.findFirst({
-    where: { userId },
-    orderBy: { createdAt: "desc" },
-  });
-  if (!saved) return null;
-
-  const memberships = await prisma.membership.findMany({
-    where: { userId },
-    select: { teamId: true, role: true },
-  });
-  const sources = await attachDocumentIds(
-    await chunksById(memberships, saved.chunkIds),
-  );
   return { question: saved, sources };
 }
 

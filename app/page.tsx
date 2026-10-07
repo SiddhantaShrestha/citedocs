@@ -4,55 +4,10 @@ import { AskForm } from "@/app/ask/ask-form";
 import { UploadForm } from "@/app/documents/upload-form";
 import { SiteHeader } from "@/components/site-header";
 import { VisibilityBadge } from "@/components/visibility-badge";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { cleanAnswer } from "@/lib/answer";
-import { latestAnswer } from "@/lib/ask";
-import { splitChunks } from "@/lib/chunk";
+import { Card, CardContent } from "@/components/ui/card";
 import { isDemoReadonly } from "@/lib/demo";
 import { listVisibleDocuments } from "@/lib/documents";
 import { getCurrentUser } from "@/lib/session";
-
-function preview(text: string) {
-  const flat = text.replace(/\s+/g, " ").trim();
-  if (flat.length <= 220) return flat;
-  return `${flat.slice(0, 220)}...`;
-}
-
-function orderedSources<T extends { id: string }>(sources: T[], chunkIds: string[]) {
-  const byId = new Map(sources.map((source) => [source.id, source]));
-  const ordered = chunkIds
-    .map((id) => byId.get(id))
-    .filter((source): source is T => source != null);
-
-  for (const source of sources) {
-    if (!ordered.some((item) => item.id === source.id)) ordered.push(source);
-  }
-
-  return ordered;
-}
-
-function sourceDetails(
-  source: { text: string; title: string },
-  documents: { title: string; text: string; visibility: "team" | "admins" }[],
-  fallback: number,
-) {
-  const flat = source.text.replace(/\s+/g, " ").trim();
-  const document =
-    documents.find((item) => {
-      if (item.title !== source.title) return false;
-      return splitChunks(item.text).some((chunk) => chunk === flat);
-    }) ?? documents.find((item) => item.title === source.title);
-
-  const index = document
-    ? splitChunks(document.text).findIndex((chunk) => chunk === flat)
-    : -1;
-
-  return {
-    visibility: document?.visibility ?? null,
-    chunkNumber: index >= 0 ? index + 1 : fallback,
-  };
-}
 
 export default async function Home() {
   const user = await getCurrentUser();
@@ -61,11 +16,7 @@ export default async function Home() {
   const isAdmin = user.memberships.some((membership) => membership.role === "admin");
   const canUpload = isAdmin && !isDemoReadonly();
   const documents = await listVisibleDocuments(user.memberships);
-  const latest = await latestAnswer(user.id);
   const teamName = user.memberships[0]?.team.name ?? null;
-  const sources = latest
-    ? orderedSources(latest.sources, latest.question.chunkIds)
-    : [];
 
   return (
     <div className="flex flex-1 flex-col">
@@ -83,80 +34,6 @@ export default async function Home() {
             </p>
           </div>
           <AskForm />
-          {latest ? (
-            <div className="flex flex-col gap-6">
-              <Card className="text-base/relaxed [--card-spacing:--spacing(6)]">
-                <CardHeader className="gap-5">
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm text-muted-foreground">Question</p>
-                    <CardTitle className="font-sans text-base font-medium text-foreground">
-                      {latest.question.question}
-                    </CardTitle>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <h2 className="text-sm text-muted-foreground">Answer</h2>
-                    <p className="text-2xl leading-9 text-foreground">
-                      {cleanAnswer(latest.question.answer)}
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-              <div className="flex flex-col gap-4">
-                <h2 className="text-sm font-medium text-muted-foreground">Sources</h2>
-                {sources.length > 0 ? (
-                  <ul className="flex flex-col gap-4">
-                    {sources.map((source, index) => {
-                      const details = sourceDetails(source, documents, index + 1);
-                      return (
-                        <li key={source.id}>
-                          <Link
-                            href={`/documents/${source.documentId}?chunk=${source.id}`}
-                            className="block"
-                          >
-                            <Card className="text-base/relaxed [--card-spacing:--spacing(5)]">
-                              <CardHeader>
-                                <div className="flex items-start justify-between gap-4">
-                                  <CardTitle className="font-sans text-base">
-                                    {source.title}
-                                  </CardTitle>
-                                  <div className="flex shrink-0 items-center gap-2">
-                                    {details.visibility ? (
-                                      <VisibilityBadge visibility={details.visibility} />
-                                    ) : null}
-                                    <Badge variant="outline">Chunk {details.chunkNumber}</Badge>
-                                  </div>
-                                </div>
-                              </CardHeader>
-                              <CardContent>
-                                <blockquote className="border-l-2 border-accent pl-4 text-base leading-7 text-foreground">
-                                  {preview(source.text)}
-                                </blockquote>
-                              </CardContent>
-                            </Card>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                ) : (
-                  <Card>
-                    <CardContent>
-                      <p className="text-base text-foreground">No passage matched this question.</p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            </div>
-          ) : (
-            <Card>
-              <CardContent className="flex flex-col gap-1">
-                <p className="text-base text-foreground">No answer yet.</p>
-                <p className="text-sm text-muted-foreground">
-                  Ask something that should be in the documents.
-                </p>
-              </CardContent>
-            </Card>
-          )}
         </section>
 
         <section className="flex flex-col gap-6 lg:sticky lg:top-6">
